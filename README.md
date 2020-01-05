@@ -28,7 +28,7 @@ Watch task is used for making a preview while editing the map.
 
 ```
 $ cd ../hideout
-$ node runTask watch
+$ node run watch
 ```
 
 Then edit any map file end save it - preview will appear.
@@ -47,6 +47,7 @@ Future:
 - the ability to spend money on information about the purpose of burglary or bribing the service - e.g. view from several windows available before entering the house or the key left on the shelf.
 - skills e.g. lockpicking
 - fog of war
+- light and sound
 - introducing needs for npc, so that guards change their routes, e.g. because of hunger
 - introducing character traits to increase their diversity, e.g. laziness, caution, aggression, drunkenness
 - map editor, creating homes for thieves themselves

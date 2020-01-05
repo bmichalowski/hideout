@@ -1,4 +1,7 @@
-var tiles = require("./utils/tiles").tiles;
+var tiles = require("./utils/tiles");
+var virtualConsole = require("./utils/virtualConsole");
+var mapValidation = require("./utils/mapValidation");
+var getMapFile = require("./utils/getMapFile");
 
 // if (require.main === module) {
 //   console.log("called directly");
@@ -6,35 +9,11 @@ var tiles = require("./utils/tiles").tiles;
 //   console.log("required as a module");
 // }
 
-var virtualConsole = {
-  lines: [],
-  currentLine: 0,
-  log: function(msg, appendToCurrentLine) {
-    if (!appendToCurrentLine) virtualConsole.currentLine++;
+var mapFile = getMapFile(process.cwd());
+console.log(`mapFile: ${mapFile}`);
 
-    if (
-      appendToCurrentLine &&
-      virtualConsole.lines[virtualConsole.currentLine]
-    ) {
-      virtualConsole.lines[virtualConsole.currentLine] += msg;
-    } else {
-      virtualConsole.lines[virtualConsole.currentLine] = msg;
-    }
 
-    console.clear();
-
-    virtualConsole.lines.forEach(function(line) {
-      console.log(line);
-    });
-  },
-  clear: function() {
-    console.clear();
-    virtualConsole.currentLine = 0;
-    virtualConsole.lines = [];
-  }
-};
-
-var getCalculatedMap = function(map) {
+var calculateFloor = function(map) {
   var rawMap = [];
   let currentRow = 0;
   map.forEach((row, rowIdx) => {
@@ -49,21 +28,20 @@ var getCalculatedMap = function(map) {
 
 var calculateObjects = function(objects, map) {
   var updatedMap = map;
-  objects.forEach(obj => {
-    const { x, y, state } = obj;
-    if (obj.name === "door" && map[y][x] !== "D")
-      console.error(
-        `(${map[y][x]}): Target element is not a door object. Check cords. x: ${obj.x}, y: ${obj.y}.`
-      );
-    map[y][x] = obj.possibleStates[state].symbol();
+  objects.forEach(({ x, y, state, possibleStates, name }) => {
+    try{
+      map[y][x] = possibleStates[state].symbol();
+    } catch(e) {console.log('calculateObjects: ', { x, y, state, possibleStates, name }, e)}
+    
   });
   return updatedMap;
 };
 
 var draw = function(mapFile) {
-  var map = getCalculatedMap(mapFile.map);
-  map = calculateObjects(mapFile.objects, map);
-  virtualConsole.log(`---(${mapFile.name})---`);
+  var initializedMap = mapFile.init();
+  var map = calculateFloor(initializedMap.map);
+  map = calculateObjects(initializedMap.objects, map);
+  virtualConsole.log(`---(${initializedMap.name})---`);
   virtualConsole.log("");
   map.forEach(row => {
     row.forEach(tile => {
@@ -72,28 +50,10 @@ var draw = function(mapFile) {
     virtualConsole.log("");
   });
   virtualConsole.log("");
+
+  mapValidation(map);
 };
 
-var getMapFile = function() {
-  try {
-    var mapFromArgs = process.argv.slice(2)[0];
-    if (!process.argv.slice(2)[0]) {
-      console.log("Map not specify, example map will be loaded.");
-    }
-    var mapFile = require("./levels/" +
-      (process.argv.slice(2)[0] || "example"));
-  } catch (e) {
-    if (e.code === "MODULE_NOT_FOUND") {
-      console.log("Provided map name is invalid - map not found.");
-      process.exit(1);
-    } else {
-      throw new Error(e);
-    }
-  }
-  return mapFile;
-};
-
-draw(getMapFile());
 const waitForInput = () => {
   var stdin = process.stdin;
   console.log(typeof stdin, typeof stdin.setRawMode);
@@ -118,8 +78,11 @@ const waitForInput = () => {
   });
 };
 
+draw(mapFile);
+
 // check if flag is present
 if (process.argv.slice(2).indexOf("skipWaitForInput") > -1) {
   return;
 }
+
 waitForInput();

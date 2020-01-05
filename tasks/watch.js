@@ -20,16 +20,15 @@ const reloadFile = fileName => {
 };
 
 var fs = require("fs");
-// var filePath = 'C:\\project\\hideout\\levels';
-var filePath = "./levels";
-var file = fs.readdirSync(filePath);
+var dirPath = "./maps";
+var file = fs.readdirSync(dirPath);
 
 var run = () => {
   console.log(
-    "Watcher activated for ./levels. Currently present maps: " + file.join(", ")
+    `Watcher activated for ${dirPath}. Currently present maps: ${file.join(", ")}`
   );
   console.log("Ctrl+C to stop.");
-  fs.watch(filePath, "utf8", function(event, trigger) {
+  fs.watch(dirPath, "utf8", function(event, trigger) {
     reloadFile(trigger);
   });
 };

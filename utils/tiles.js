@@ -1,17 +1,17 @@
-var actions = ["use", "look", "take", "drop", "move"];
+var actions = ["use", "look", "take", "drop", "walk"];
 
-// const tiles = function() {
-//   var collection = {};
-//   var add = function(key, obj) {
-//     collection[key] = obj;
-//   };
-//   return {
-//     add: function(key, obj) {
-//       collection[key] = obj;
-//     },
-//     get: (key, state) => collection[key].states[state]
-//   };
-// };
+var item = {
+  name: 'item',
+  value: 20,
+  use: () => {
+    // ...
+    return '';
+  },
+  look: () => {
+    // ...
+    return '';
+  }
+};
 
 var getDoorOrientation = function(map, x, y) {
   if (map[y - 1][x].name === "wall" && map[y + 1][x].name === "wall") {
@@ -121,26 +121,22 @@ var tiles = {
   6: () => "D" // door
 };
 
-module.exports = {
-  tiles
-};
+module.exports = tiles;
 
 /**
  * 
-type: static
  Wall
     stone
     wood
-    one block - w /s pillar
+    one block - w(OOD) /s(TONE) pillar
 Door
     wood
-    iron
+    iron ??
 Floor
-    dirt
+    dirt XXX
     wooden planks
     stone
 
-type: dynamic
 Container
     chest
     barrel
