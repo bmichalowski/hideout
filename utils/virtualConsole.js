@@ -9,12 +9,15 @@ module.exports = {
     } else {
       this.lines[this.currentLine] = msg;
     }
-
-    console.clear();
-
+  },
+  show: function() {
+    this.clear();
     this.lines.forEach(function(line) {
       console.log(line);
     });
+  },
+  get: function() {
+    return this.lines;
   },
   clear: function() {
     console.clear();

@@ -1,8 +1,7 @@
 // Add map preview in console
+const { exec } = require("child_process");
 
 const reloadFile = fileName => {
-  const { exec } = require("child_process");
-
   exec(
     `node index.js ${fileName} skipWaitForInput`,
     (error, stdout, stderr) => {
@@ -14,7 +13,11 @@ const reloadFile = fileName => {
         console.log(`stderr: ${stderr}`);
         return;
       }
-      console.log(`stdout: ${stdout}`);
+      if (stdout) {
+        console.log(`stdout: ${stdout}`);
+        return;
+      }
+      console.log(`Watcher: sth gone wrong.`);
     }
   );
 };
@@ -25,7 +28,9 @@ var file = fs.readdirSync(dirPath);
 
 var run = () => {
   console.log(
-    `Watcher activated for ${dirPath}. Currently present maps: ${file.join(", ")}`
+    `Watcher activated for ${dirPath}. Currently present maps: ${file.join(
+      ", "
+    )}`
   );
   console.log("Ctrl+C to stop.");
   fs.watch(dirPath, "utf8", function(event, trigger) {

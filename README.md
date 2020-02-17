@@ -37,11 +37,12 @@ Then edit any map file end save it - preview will appear.
 
 In progress:
 
-- map with all objects and characters
+- map with all objects
 
 Future:
 
 - character control - movement, interaction with doors, containers, dropping and lifting objects
+- add npc characters
 - guards searching the rooms
 - memorizing player's achievements between missions and building wealth / reputation
 - the ability to spend money on information about the purpose of burglary or bribing the service - e.g. view from several windows available before entering the house or the key left on the shelf.

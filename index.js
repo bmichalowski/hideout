@@ -10,8 +10,6 @@ var getMapFile = require("./utils/getMapFile");
 // }
 
 var mapFile = getMapFile(process.cwd());
-console.log(`mapFile: ${mapFile}`);
-
 
 var calculateFloor = function(map) {
   var rawMap = [];
@@ -29,10 +27,15 @@ var calculateFloor = function(map) {
 var calculateObjects = function(objects, map) {
   var updatedMap = map;
   objects.forEach(({ x, y, state, possibleStates, name }) => {
-    try{
+    try {
       map[y][x] = possibleStates[state].symbol();
-    } catch(e) {console.log('calculateObjects: ', { x, y, state, possibleStates, name }, e)}
-    
+    } catch (e) {
+      console.log(
+        "calculateObjects: ",
+        { x, y, state, possibleStates, name },
+        e
+      );
+    }
   });
   return updatedMap;
 };
@@ -50,13 +53,14 @@ var draw = function(mapFile) {
     virtualConsole.log("");
   });
   virtualConsole.log("");
-
+  console.log("virt console", __dirname, __filename);
+  console.log(virtualConsole.get().join("\n"));
+  virtualConsole.show();
   mapValidation(map);
 };
 
 const waitForInput = () => {
   var stdin = process.stdin;
-  console.log(typeof stdin, typeof stdin.setRawMode);
   stdin.setRawMode(true);
 
   // resume stdin in the parent process (node app won't quit all by itself

@@ -3,23 +3,30 @@ module.exports = {
   map: [
     [2, 2, 2, 1, 2, 2, 2, 2, 2],
     [2, 4, 4, 4, 4, 4, 4, 4, 2],
-    [2, 4, 4, 2, 4, 3, 2, 1, 2],
+    [2, 4, 4, 2, 4, 2, 2, 1, 2],
     [2, 4, 2, 2, 4, 3, 2, 5, 2],
     [6, 4, 3, 3, 3, 4, 6, 5, 2],
     [2, 6, 2, 1, 2, 2, 2, 6, 2]
   ],
   init: function() {
     this.objects.push(
-      new Door(0,4, 'open'),
-      new Door(1,5, 'close'),
-      new Door(7,5, 'close'),
-      new Door(6,4, 'close'),
-      new Chest(2,2, 'close', [{name: 'letter', use: function(){return 'A letter.'}}]),
-      new Table(4,2, []),
+      new Door(0, 4, "open"),
+      new Door(1, 5, "close"),
+      new Door(7, 5, "close"),
+      new Door(6, 4, "close"),
+      new Chest(2, 2, "close", [
+        {
+          name: "letter",
+          look: function() {
+            return "A letter.";
+          }
+        }
+      ]),
+      new Table(5, 3, [])
     );
     return this;
   },
-  objects: [],
+  objects: []
 };
 
 var Door = function(x, y, initialState) {
@@ -32,12 +39,12 @@ var Door = function(x, y, initialState) {
       open: {
         name: "open",
         symbol: () => "/",
-        crossable: true,
+        crossable: true
       },
       close: {
         name: "close",
         symbol: () => "\\",
-        crossable: false,
+        crossable: false
       }
     },
     use: function() {
@@ -50,7 +57,7 @@ var Door = function(x, y, initialState) {
   };
 };
 
-var Chest = function(x,y, initialState, items) {
+var Chest = function(x, y, initialState, items) {
   return {
     name: "chest",
     container: () => true,
@@ -63,12 +70,12 @@ var Chest = function(x,y, initialState, items) {
       open: {
         name: "open",
         symbol: () => "▀",
-        crossable: false,
+        crossable: false
       },
       close: {
         name: "close",
         symbol: () => "▄",
-        crossable: false,
+        crossable: false
       }
     },
     use: function() {
@@ -81,35 +88,38 @@ var Chest = function(x,y, initialState, items) {
     },
     look: function() {
       if (this.hasSecret) {
-        this.items.push({name: 'Rusty key', look: () => 'It\'s an old rusty key.'});
+        this.items.push({
+          name: "Rusty key",
+          look: () => "It's an old rusty key."
+        });
         this.hasSecret = false;
-        return 'You have found a hole with key inside of it.';
+        return "You have found a hole with key inside of it.";
       }
-      return 'Solid wooden chest.';
+      return "Solid wooden chest.";
     }
-  }
-}
+  };
+};
 
-var Table = function(x,y, items) {
+var Table = function(x, y, items) {
   return {
     name: "table",
     container: () => true,
     items,
     x,
     y,
-    state: 'open',
+    state: "open",
     possibleStates: {
       open: {
         name: "open",
         crossable: false,
-        symbol: () => "π",
-      },
+        symbol: () => "π"
+      }
     },
     use: function() {
       return `Table is now ${this.state}.`;
     },
     look: function() {
-      return 'Solid wooden table.';
+      return "Solid wooden table.";
     }
-  }
-}
+  };
+};
