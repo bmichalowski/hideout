@@ -13,7 +13,7 @@ module.exports = {
   show: function() {
     this.clear();
     this.lines.forEach(function(line) {
-      console.log(line);
+      console.log(line.join(""));
     });
   },
   get: function() {

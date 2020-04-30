@@ -1,4 +1,5 @@
 // Add map preview in console
+const debounce = require("../utils/debounce");
 const { exec } = require("child_process");
 
 const reloadFile = fileName => {
@@ -17,7 +18,7 @@ const reloadFile = fileName => {
         console.log(`stdout: ${stdout}`);
         return;
       }
-      console.log(`Watcher: sth gone wrong.`);
+      console.log(`Watcher: Unable to open ${fileName}. Deleted?`);
     }
   );
 };
@@ -33,9 +34,13 @@ var run = () => {
     )}`
   );
   console.log("Ctrl+C to stop.");
-  fs.watch(dirPath, "utf8", function(event, trigger) {
-    reloadFile(trigger);
-  });
+  fs.watch(
+    dirPath,
+    "utf8",
+    debounce(function(event, trigger) {
+      reloadFile(trigger);
+    }, 200)
+  );
 };
 
 module.exports = run;

@@ -39,12 +39,12 @@ var Door = function(x, y, initialState) {
       open: {
         name: "open",
         symbol: () => "/",
-        crossable: true
+        crossable: () => true
       },
       close: {
         name: "close",
         symbol: () => "\\",
-        crossable: false
+        crossable: () => false
       }
     },
     use: function() {
@@ -70,12 +70,12 @@ var Chest = function(x, y, initialState, items) {
       open: {
         name: "open",
         symbol: () => "▀",
-        crossable: false
+        crossable: () => false
       },
       close: {
         name: "close",
         symbol: () => "▄",
-        crossable: false
+        crossable: () => false
       }
     },
     use: function() {
@@ -111,7 +111,7 @@ var Table = function(x, y, items) {
     possibleStates: {
       open: {
         name: "open",
-        crossable: false,
+        crossable: () => false,
         symbol: () => "π"
       }
     },
@@ -120,6 +120,23 @@ var Table = function(x, y, items) {
     },
     look: function() {
       return "Solid wooden table.";
+    }
+  };
+};
+
+/**
+ Items:
+ allways crossable, with one unchangable state
+ */
+
+var coins = function(x, y, amount) {
+  return {
+    name: "coins",
+    use: function() {
+      return `Table is now ${this.state}.`;
+    },
+    look: function() {
+      return "Pile of coins.";
     }
   };
 };

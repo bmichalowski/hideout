@@ -41,6 +41,9 @@ var calculateObjects = function(objects, map) {
 };
 
 var draw = function(mapFile) {
+  if (mapValidation(mapFile)) {
+    return;
+  }
   var initializedMap = mapFile.init();
   var map = calculateFloor(initializedMap.map);
   map = calculateObjects(initializedMap.objects, map);
@@ -53,10 +56,8 @@ var draw = function(mapFile) {
     virtualConsole.log("");
   });
   virtualConsole.log("");
-  console.log("virt console", __dirname, __filename);
   console.log(virtualConsole.get().join("\n"));
-  virtualConsole.show();
-  mapValidation(map);
+  // virtualConsole.show();
 };
 
 const waitForInput = () => {

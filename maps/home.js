@@ -1,5 +1,5 @@
 module.exports = {
-  name: "example",
+  name: "home",
   map: [
     [2, 2, 2],
     [2, 3, 6],
